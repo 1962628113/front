@@ -1,113 +1,73 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+  <div class="list">
+    <div class="header">
+      <span class="text">商品列表</span>
+      <span class="img"><img src="../assets/add.png" alt="" @click="addProduct"></span>
+    </div>
+    <div class="productList"></div>
+    <addProduct :isShow="isShow" v-if="isShow" @add="handleAddProduct"/>
   </div>
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
+import addProduct from './addProduct/addProduct'
 export default {
-  name: 'HelloWorld',
+  name: 'list',
+  components: {
+    addProduct
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      isShow: false
+    }
+  },
+  created () {
+    console.log(this.$store.actions.addProdcuts)
+  },
+  computed: {
+    ...mapState({
+      productList: state => state.productList
+    })
+  },
+  methods: {
+    ...mapActions(['addProducts']),
+    addProduct () {
+      this.isShow = true
+    },
+    handleAddProduct (obj) {
+      this.isShow = obj.isShow
+      this.$store.actions.addProdcuts(obj)
     }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+.list {
+  margin: 0 auto;
+  width: 300px;
+  height:600px;
+  overflow-y: hidden;
+  border: 1px solid #ccc;
+  position: relative;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  .header {
+    height: 80px;
+    padding: 0 16px;
+    background-color: blue;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .text {
+    margin-top: 50px;
+    font-size: 20px;
+    color: white;
+    align-self: center;
+  }
+  .img {
+    margin-top: 50px;
+    align-self: center;
+    cursor: pointer;
+  }
 </style>
